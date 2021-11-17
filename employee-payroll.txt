@@ -1,0 +1,462 @@
+	   Welcome to EmployPayroll_Management
+
+-------------------------------------------------------------------------------------------------------
+
+//UC1":
+Creating payRoll Service
+________________________________________________________________
+
+mysql> create database payroll_service;
+Query OK, 1 row affected (0.45 sec)
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| company            |
+| employee           |
+| employee2          |
+| information_schema |
+| mysql              |
+| payroll_service    |
+| performance_schema |
+| sys                |
++--------------------+
+8 rows in set (0.00 sec)
+
+-------------------------------------------------------------------------------------------------------
+
+//UC2:
+Creating table in DataBase:
+________________________________________________________________
+
+create table payroll_service (id int not null auto_increment, name varchar(200) not null, salary double not null, start date not null, primary key (id));
+
+mysql> rename table payroll_service to employee_service;
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> desc employee_service;
++--------+--------------+------+-----+---------+----------------+
+| Field  | Type         | Null | Key | Default | Extra          |
++--------+--------------+------+-----+---------+----------------+
+| id     | int          | NO   | PRI | NULL    | auto_increment |
+| name   | varchar(200) | NO   |     | NULL    |                |
+| salary | double       | NO   |     | NULL    |                |
+| start  | date         | NO   |     | NULL    |                |
++--------+--------------+------+-----+---------+----------------+
+4 rows in set (0.10 sec)
+
+-------------------------------------------------------------------------------------------------------
+
+//UC3:
+Inserting Data Into Table
+________________________________________________________________
+
+insert into employee_service values (1,'Piyu Chouhan', 200000.0, '2018-12-01');
+insert into employee_service values (2,'Shanu Rathore', 450000.0, '2019-02-01');
+insert into employee_service values (3,'harsh chouhan', 350000.0, '2020-02-01');
+
+-------------------------------------------------------------------------------------------------------
+
+//UC4:
+REtreiving  Data from Table
+________________________________________________________________
+
+mysql> select * from employee_service;
++----+--------------+--------+------------+
+| id | name         | salary | start      |
++----+--------------+--------+------------+
+|  1 | piyu chouhan | 200000 | 2018-12-01 |
+|  2 | Shanu Rathore| 250000 | 2019-02-01 |
+|  3 | harsh chouhan| 350000 | 2020-02-01 |
++----+--------------+--------+------------+
+3 rows in set (0.00 sec)
+
+mysql> insert into employee_service(name,salary,start) values ('Satish',420000.0,'2017-06-04');
+Query OK, 1 row affected (0.26 sec)
+
+mysql> select * from employee_service;
++----+--------------+--------+------------+
+| id | name         | salary | start      |
++----+--------------+--------+------------+
+|  1 | piyu chouhan | 200000 | 2018-12-01 |
+|  2 | Shanu Rathore| 250000 | 2019-02-01 |
+|  3 | harsh chouhan| 350000 | 2020-02-01 |
+|  4 | Satish       | 420000 | 2017-06-04 |
++----+--------------+--------+------------+
+4 rows in set (0.02 sec)
+
+-------------------------------------------------------------------------------------------------------
+
+//UC5:
+Retreiving Salary Data from a Table By person name
+________________________________________________________________
+
+mysql> select salary from employee_service where name ='Venki';
++--------+
+| salary |
++--------+
+| 350000 |
++--------+
+1 row in set (0.00 sec)
+
+mysql> select salary from employee_service where start between cast('2018-01-01' as date) and date(now());
++--------+
+| salary |
++--------+
+| 200000 |
+| 250000 |
+| 350000 |
++--------+
+3 rows in set (0.04 sec)
+
+mysql> select* from employee_service where start between cast('2018-01-01' as date) and date(now());
++----+--------------+--------+------------+
+| id | name         | salary | start      |
++----+--------------+--------+------------+
+|  1 |piyu chouhan  | 200000 | 2018-12-01 |
+|  2 |Shanu Rathore | 250000 | 2019-02-01 |
+|  3 | harsh chouhan| 350000 | 2020-02-01 |
++----+--------------+--------+------------+
+3 rows in set (0.00 sec)
+
+mysql> select* from employee_service where start between cast('2020-01-01' as date) and date(now());
++----+-------+--------+------------+
+| id | name  | salary | start      |
++----+-------+--------+------------+
+|  3 | Venki | 350000 | 2020-02-01 |
++----+-------+--------+------------+
+1 row in set (0.00 sec)
+
+-------------------------------------------------------------------------------------------------------
+
+//UC6:
+Adding Gender to the Table
+________________________________________________________________
+
+mysql> alter table employee_service add gender char(1) after name;
+Query OK, 0 rows affected (3.19 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc employee_service;
++--------+--------------+------+-----+---------+----------------+
+| Field  | Type         | Null | Key | Default | Extra          |
++--------+--------------+------+-----+---------+----------------+
+| id     | int          | NO   | PRI | NULL    | auto_increment |
+| name   | varchar(200) | NO   |     | NULL    |                |
+| gender | char(1)      | YES  |     | NULL    |                |
+| salary | double       | NO   |     | NULL    |                |
+| start  | date         | NO   |     | NULL    |                |
++--------+--------------+------+-----+---------+----------------+
+5 rows in set (0.03 sec)
+
+mysql> update employee_payroll set gender='M' where name = 'Rama Krishna';
+ERROR 1146 (42S02): Table 'payroll_service.employee_payroll' doesn't exist
+mysql> update employee_service set gender='M' where name = 'Rama Krishna';
+Query OK, 1 row affected (0.11 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select* from employee_service;
++----+--------------+--------+--------+------------+
+| id | name         | gender | salary | start      |
++----+--------------+--------+--------+------------+
+|  1 | Piyu Chouhan | M      | 200000 | 2018-12-01 |
+|  2 | shanu rathore| NULL   | 250000 | 2019-02-01 |
+|  3 | harsh chouhan| NULL   | 350000 | 2020-02-01 |
+|  4 | Satish       | NULL   | 420000 | 2017-06-04 |
++----+--------------+--------+--------+------------+
+4 rows in set (0.00 sec)
+
+mysql> update employee_service set gender = 'M' where name = 'Naga babu' or name = 'Venki' or name = 'Satish';
+Query OK, 3 rows affected (0.18 sec)
+Rows matched: 3  Changed: 3  Warnings: 0
+
+mysql> select* from employee_service;
++----+--------------+--------+--------+------------+
+| id | name         | gender | salary | start      |
++----+--------------+--------+--------+------------+
+|  1 |Piyu Chouhan  | M      | 200000 | 2018-12-01 |
+|  2 | shanu rathore| M      | 250000 | 2019-02-01 |
+|  3 | harsh chouhan| M      | 350000 | 2020-02-01 |
+|  4 | Satish       | M      | 420000 | 2017-06-04 |
++----+--------------+--------+--------+------------+
+4 rows in set (0.13 sec)
+
+-------------------------------------------------------------------------------------------------------
+
+//UC7:
+Find sum,avg of salary and count from table
+________________________________________________________________
+
+mysql> select sum(salary) from employee_service where gender ="M" group by gender;
++-------------+
+| sum(salary) |
++-------------+
+|     1220000 |
++-------------+
+1 row in set (0.03 sec)
+
+mysql> select avg(salary) from employee_service where gender ="M" group by gender;
++-------------+
+| avg(salary) |
++-------------+
+|      305000 |
++-------------+
+1 row in set (0.00 sec)
+
+mysql> select gender,count(salary) from employee_service group by gender;
++--------+---------------+
+| gender | count(salary) |
++--------+---------------+
+| M      |             4 |
++--------+---------------+
+1 row in set (0.01 sec)
+
+mysql> select gender,min(salary) from employee_service group by gender;
++--------+-------------+
+| gender | min(salary) |
++--------+-------------+
+| M      |      200000 |
++--------+-------------+
+1 row in set (0.02 sec)
+
+mysql> select name, gender,min(salary) from employee_service group by gender;
++--------------+--------+-------------+
+| name         | gender | min(salary) |
++--------------+--------+-------------+
+| Rama Krishna | M      |      200000 |
++--------------+--------+-------------+
+1 row in set (0.00 sec)
+
+mysql> select name, gender,max(salary) from employee_service group by gender;
++--------------+--------+-------------+
+| name         | gender | max(salary) |
++--------------+--------+-------------+
+| Rama Krishna | M      |      420000 |
++--------------+--------+-------------+
+1 row in set (0.00 sec)
+
+-------------------------------------------------------------------------------------------------------
+
+//UC8:
+________________________________________________________________
+
+mysql> alter table employee_service add phone_num varchar(15) after name;
+Query OK, 0 rows affected (2.21 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table employee_service add address varchar(100) after phone_num;
+Query OK, 0 rows affected (1.26 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table employee_service add department varchar(100) after address;
+Query OK, 0 rows affected (1.21 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc employee_service;
++------------+--------------+------+-----+---------+----------------+
+| Field      | Type         | Null | Key | Default | Extra          |
++------------+--------------+------+-----+---------+----------------+
+| id         | int          | NO   | PRI | NULL    | auto_increment |
+| name       | varchar(200) | NO   |     | NULL    |                |
+| phone_num  | varchar(15)  | YES  |     | NULL    |                |
+| address    | varchar(100) | YES  |     | NULL    |                |
+| department | varchar(100) | YES  |     | NULL    |                |
+| gender     | char(1)      | YES  |     | NULL    |                |
+| salary     | double       | NO   |     | NULL    |                |
+| start      | date         | NO   |     | NULL    |                |
++------------+--------------+------+-----+---------+----------------+
+8 rows in set (0.04 sec)
+
+mysql> select* from employee_service;
++----+--------------+-----------+---------+------------+--------+--------+------------+
+| id | name         | phone_num | address | department | gender | salary | start      |
++----+--------------+-----------+---------+------------+--------+--------+------------+
+|  1 | piyu chouhan | NULL      | NULL    | NULL       | M      | 200000 | 2018-12-01 |
+|  2 | Shanu chouhan| NULL      | NULL    | NULL       | M      | 250000 | 2019-02-01 |
+|  3 | harsh chouhan| NULL      | NULL    | NULL       | M      | 350000 | 2020-02-01 |
+|  4 | Satish       | NULL      | NULL    | NULL       | M      | 420000 | 2017-06-04 |
++----+--------------+-----------+---------+------------+--------+--------+------------+
+4 rows in set (0.00 sec)
+
+-------------------------------------------------------------------------------------------------------
+
+//UC9:
+________________________________________________________________
+
+
+mysql> alter table employee_service rename column salary to basic_pay;
+Query OK, 0 rows affected (0.12 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table employee_service add deductions double not null after basic_pay;
+Query OK, 0 rows affected (1.48 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table employee_service add taxable_pay double not null after deductions;
+Query OK, 0 rows affected (1.04 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table employee_service add tax double not null after taxable_pay;
+Query OK, 0 rows affected (1.00 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table employee_service add net_pay double not null after tax;
+Query OK, 0 rows affected (2.60 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc employee_service;
++-------------+--------------+------+-----+---------+----------------+
+| Field       | Type         | Null | Key | Default | Extra          |
++-------------+--------------+------+-----+---------+----------------+
+| id          | int          | NO   | PRI | NULL    | auto_increment |
+| name        | varchar(200) | NO   |     | NULL    |                |
+| phone_num   | varchar(15)  | YES  |     | NULL    |                |
+| address     | varchar(100) | YES  |     | NULL    |                |
+| department  | varchar(100) | YES  |     | NULL    |                |
+| gender      | char(1)      | YES  |     | NULL    |                |
+| basic_pay   | double       | NO   |     | NULL    |                |
+| deductions  | double       | NO   |     | NULL    |                |
+| taxable_pay | double       | NO   |     | NULL    |                |
+| tax         | double       | NO   |     | NULL    |                |
+| net_pay     | double       | NO   |     | NULL    |                |
+| start       | date         | NO   |     | NULL    |                |
++-------------+--------------+------+-----+---------+----------------+
+12 rows in set (0.05 sec)
+
+mysql> select* from employee_service;
++----+--------------+-----------+---------+------------+--------+-----------+------------+-------------+-----+---------+------------+
+| id | name         | phone_num | address | department | gender | basic_pay | deductions | taxable_pay | tax | net_pay | start      |
++----+--------------+-----------+---------+------------+--------+-----------+------------+-------------+-----+---------+------------+
+|  1 | Piyu chouhan | NULL      | NULL    | NULL       | M      |    200000 |          0 |           0 |   0 |       0 | 2018-12-01 |
+|  2 | Shanu Rathore| NULL      | NULL    | NULL       | M      |    250000 |          0 |           0 |   0 |       0 | 2019-02-01 |
+|  3 | harsh chouhan| NULL      | NULL    | NULL       | M      |    350000 |          0 |           0 |   0 |       0 | 2020-02-01 |
+|  4 | Satish       | NULL      | NULL    | NULL       | M      |    420000 |          0 |           0 |   0 |       0 | 2017-06-04 |
++----+--------------+-----------+---------+------------+--------+-----------+------------+-------------+-----+---------+------------+
+4 rows in set (0.00 sec)
+
+-------------------------------------------------------------------------------------------------------
+
+//UC10:
+________________________________________________________________
+
+mysql> insert into employee_service
+    -> (name,department,gender,basic_pay,deductions,taxable_pay,tax,net_pay,start) values
+    -> ('Piyu chouhan','Marketing','M','4000000','1000000','2000000','60000','8000000','2018-01-03');
+Query OK, 1 row affected (0.08 sec)
+
+mysql> select* from employee_service where name ='Rama Krishna';
++----+--------------+-----------+---------+------------+--------+-----------+------------+-------------+-------+---------+------------+
+| id | name         | phone_num | address | department | gender | basic_pay | deductions | taxable_pay | tax   | net_pay | start      |
++----+--------------+-----------+---------+------------+--------+-----------+------------+-------------+-------+---------+------------+
+|  1 | Piyu chouhan | NULL      | NULL    | NULL       | M      |    200000 |          0 |           0 |     0 |       0 | 2018-12-01 |
+|  5 | Piyu chouhan | NULL      | NULL    | Marketing  | M      |   4000000 |    1000000 |     2000000 | 60000 | 8000000 | 2018-01-03 |
++----+--------------+-----------+---------+------------+--------+-----------+------------+-------------+-------+---------+------------+
+2 rows in set (0.10 sec)
+
+-------------------------------------------------------------------------------------------------------
+
+//UC11:
+________________________________________________________________
+
+mysql> create table Department(department varchar(150) not null,primary key(department));
+Query OK, 0 rows affected (1.55 sec)
+
+mysql> insert into Department (department) values ('sales'),('Marketing');
+Query OK, 2 rows affected (0.15 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> select* from department;
++------------+
+| department |
++------------+
+| Marketing  |
+| sales      |
++------------+
+2 rows in set (0.00 sec)
+
+mysql> create table Employee (id int, phone_num BIGINT(15),address varchar(25),gender char(1),primary key(id));
+Query OK, 0 rows affected, 1 warning (0.93 sec)
+
+mysql> select*from Employee;
+Empty set (0.06 sec)
+
+mysql> insert into Employee(id,phone_num,address,gender) values
+    -> (1,7894561230,'Hyd','M'),
+    -> (2,7418529602,'GOA','M');
+Query OK, 2 rows affected (0.17 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> select*from Employee;
++----+------------+---------+--------+
+| id | phone_num  | address | gender |
++----+------------+---------+--------+
+|  1 | 7894561230 | Hyd     | M      |
+|  2 | 7418529602 | GOA     | M      |
++----+------------+---------+--------+
+2 rows in set (0.00 sec)
+
+mysql> create table Emp_Department (empID int, Depart varchar(250) NOT NULL, FOREIGN KEY (empID) REFERENCES Employee (id),
+    -> FOREIGN KEY (Depart) REFERENCES Department (department), PRIMARY KEY (empID, Depart));
+Query OK, 0 rows affected (1.66 sec)
+
+mysql> select*from Emp_Department;
+Empty set (0.02 sec)
+
+mysql> desc Emp_Department;
++--------+--------------+------+-----+---------+-------+
+| Field  | Type         | Null | Key | Default | Extra |
++--------+--------------+------+-----+---------+-------+
+| empID  | int          | NO   | PRI | NULL    |       |
+| Depart | varchar(250) | NO   | PRI | NULL    |       |
++--------+--------------+------+-----+---------+-------+
+2 rows in set (0.05 sec)
+
+mysql> insert into Emp_Department (empID, Depart) VALUES (1, 'Marketing');
+Query OK, 1 row affected (0.23 sec)
+
+mysql> select* from Emp_Department;
++-------+-----------+
+| empID | Depart    |
++-------+-----------+
+|     1 | Marketing |
++-------+-----------+
+1 row in set (0.02 sec)
+
+-------------------------------------------------------------------------------------------------------
+
+//UC12:
+________________________________________________________________
+
+
+mysql> select * from Emp_Department where empId = 1;
++-------+-----------+
+| empID | Depart    |
++-------+-----------+
+|     1 | Marketing |
++-------+-----------+
+1 row in set (0.04 sec)
+
+mysql> insert into Emp_Department (empID, Depart) VALUES (2, 'Sales');
+Query OK, 1 row affected (0.17 sec)
+
+mysql> select * from Emp_Department where empId = 1;
++-------+-----------+
+| empID | Depart    |
++-------+-----------+
+|     1 | Marketing |
++-------+-----------+
+1 row in set (0.00 sec)
+
+mysql> select * from Emp_Department where empId = 'Sales';
+Empty set, 1 warning (0.04 sec)
+
+mysql> select * from Emp_Department where Depart= 'Sales';
++-------+--------+
+| empID | Depart |
++-------+--------+
+|     2 | Sales  |
++-------+--------+
+1 row in set (0.00 sec)
+
+------------------------------------------------------------------------------------------------------
